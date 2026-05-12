@@ -2,7 +2,7 @@ services:
   web:
     image: nginx:alpine
     ports:
-      - "9090:80"
+      - "9001:80"
     volumes:
       - ./html:/usr/share/nginx/html
     depends_on:

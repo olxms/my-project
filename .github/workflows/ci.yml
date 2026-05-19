@@ -8,16 +8,30 @@ on:
     branches: [main]
 
 jobs:
-  check:
+  lint:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Check docker-compose file
+      - name: Install yamllimt
+        run: pip install yamllint
+
+      - name: Lint YAML files
+        run: yamllint .github/workflows/ci.yml
+  biuld:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/workflows@v4
+
+      - name: Build Docker image
+        run: docker build -t my-app:test .
+
+      - name: Test container starts
         run: |
-          echo "Перевіряємо файли проекту..."
-          ls -la
-          cat docker-compose.yml
-          echo "Перевірка завершена!"
+          docker run -d -p 8000:8000 --name test-app my-app:test
+          sleep 3
+          curl http://localhost:8000
+          docker stop test-app

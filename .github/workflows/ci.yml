@@ -1,0 +1,22 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check docker-compose file
+      run: | 
+        echo "Перевіряємо файли проекту..."
+        ls -la
+        cat docker-compose.yml
+        echo "Перевірка завершена!"
